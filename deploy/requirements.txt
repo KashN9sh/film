@@ -1,0 +1,6 @@
+# Для работы fastapi, описано в доках
+fastapi
+pydantic
+uvicorn[standard]
+gunicorn
+
