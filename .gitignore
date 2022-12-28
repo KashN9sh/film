@@ -1,3 +1,5 @@
+.env
+
 deploy/db_backup
 deploy/db_data
 deploy/gunicorn.py
