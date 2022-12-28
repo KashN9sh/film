@@ -4,4 +4,11 @@ pydantic
 uvicorn[standard]
 gunicorn
 
+# Безопасность
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
+
+
+# Это мое
 sqlalchemy

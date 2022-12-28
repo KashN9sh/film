@@ -5,10 +5,9 @@ services:
   back:
     container_name: film-back
     image: film
-    user: "1000:1001"
+    user: "${UID}:${GID}"
     working_dir: /app
     build: ./deploy
-    ports: ["127.0.0.1:8000:8000"]
     volumes:
       - ./back:/app
       - ./media:/media
@@ -23,3 +22,15 @@ services:
     volumes:
       - ./front:/app
     command: sleep 30d
+
+
+  db:
+    container_name: film-db
+    image: postgres:14
+    user: "${UID}:${GID}"
+    env_file:
+      - ./.env
+    volumes:
+      - ./deploy/db_data:/var/lib/postgresql/data
+      - ./deploy/db_backup:/backup
+      - ./deploy/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
