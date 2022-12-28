@@ -3,4 +3,4 @@
 deploy/db_backup
 deploy/db_data
 deploy/gunicorn.py
-back/__pycache__
+*__pycache__

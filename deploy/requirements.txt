@@ -12,3 +12,4 @@ passlib[bcrypt]
 
 # Это мое
 sqlalchemy
+psycopg2
