@@ -3,7 +3,7 @@ from importlib import import_module
 from alembic.autogenerate import compare_metadata
 from alembic.migration import MigrationContext
 
-from database import Base
+from .database import Base
 
 
 class SyncManager:

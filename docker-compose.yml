@@ -8,6 +8,8 @@ services:
     user: "${UID}:${GID}"
     working_dir: /app
     build: ./deploy
+    env_file:
+      - ./.env
     volumes:
       - ./back:/app
       - ./media:/media
