@@ -16,12 +16,18 @@ def get_films(db: Session, skip: int = 0, limit: int = 100):
 def get_films_by_iso(db: Session, iso: int):
     return db.query(models.Film).filter(models.Film.iso == iso).all()
 
+def get_films_by_type(db: Session, type: str):
+    return db.query(models.Film).filter(models.Film.type == type).all()
 
 
-
-def create_user(db: Session, user: schemas.FilmCreate):
-    db_user = models.User(email=user.email, hashed_password=fake_hashed_password)
-    db.add(db_user)
+def create_film(db: Session, film: schemas.FilmCreate):
+    db_film = models.Film(
+        name=film.name,
+        iso=film.iso,
+        type=film.type,
+        )
+        
+    db.add(db_film)
     db.commit()
-    db.refresh(db_user)
-    return db_user
+    db.refresh(db_film)
+    return db_film
