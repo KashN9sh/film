@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import typer
-from lib.database import engine
-from lib.syncdb import SyncManager
+from database import engine
+from syncdb import SyncManager
 from config import MODEL_MODULES
 
 manager = typer.Typer()

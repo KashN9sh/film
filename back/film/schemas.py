@@ -1,14 +1,12 @@
 from pydantic import BaseModel
 
-class UserBase(BaseModel):
-    email: str
+class FilmBase(BaseModel):
+    name: str
+    iso: int
+    type: str
 
 
-class UserCreate(UserBase):
-    password: str
-
-
-class User(UserBase):
+class Film(FilmBase):
     id: int
     is_active: bool
 
