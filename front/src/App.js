@@ -4,6 +4,7 @@ import axios from 'axios'
 import bootstrap from 'bootstrap'
 import { Component } from 'react'
 
+
 class FilmsContainer extends Component{
 
   constructor(props){
@@ -18,6 +19,7 @@ class FilmsContainer extends Component{
       chosen_film: 0,
 
       page: 0,
+      update: false,
 
       addedFilm:{
         manufacturer: "",
@@ -48,12 +50,7 @@ class FilmsContainer extends Component{
           data: filmsContainer.state.addedFilm
       })
           .then(function (response) {
-            console.log(response.data)
-            filmsContainer.setState(
-              {
-                films: [...filmsContainer.state.films, response.data]
-              }
-            )
+            filmsContainer.getFilms()
           })
           .catch(function (error) {
             console.log(error)
@@ -69,74 +66,104 @@ class FilmsContainer extends Component{
           params: new URLSearchParams({skip: filmsContainer.state.page*10}),
       })
           .then(function (response) {
-            console.log(response.data)
-
             filmsContainer.setState(
               {
-                films: response.data
+                films: response.data,
+                update: false
               }
             )
           })
           .catch(function (error) {
+            filmsContainer.setState(
+              {
+                update: false
+              }
+            )
             console.log(error)
           })
-  }
-
-  componentDidMount(){
-
-    if (this.state.films.length === 0){
-      this.getFilms()
-    }
-
   }
 
   render() {
     let filmsContainer = this
 
+    if (filmsContainer.state.update || filmsContainer.state.films.length === 0)
+      this.getFilms()
+
     return(
       <div className="col border p-3 m-3 mt-3 rounded">
         <h2>Пленки</h2>
+
         <div className="table-responsive">
-        <table className="table table-striped text-center">
-          <thead>
-            <tr>
-              <th>Производитель</th>
-              <th>Название</th>
-              <th>Тип</th>
-              <th>ISO</th>
-              <th></th>
+          <table className="table table-striped text-center">
+            <thead>
+              <tr>
+                <th>Производитель</th>
+                <th>Название</th>
+                <th>Тип</th>
+                <th>ISO</th>
+                <th></th>
 
-            </tr>
-          </thead>
-          <tbody>
-
-          {this.state.films.map(
-            film => {return(
-              <tr key = {film.id}>
-                <td>{film.manufacturer}</td>
-                <td>{film.name}</td>
-                <td>{film.type}</td>
-                <td>{film.iso}</td>
-                <td>
-                <i
-                  className={filmsContainer.state.chosen_film === film.id ? "bi-pin-angle-fill":"bi-pin"}
-                  onClick={
-                  () =>{filmsContainer.setState(
-                      {
-                        chosen_film: film.id
-                      }
-                    )
-                  }}
-                  />
-                </td>
               </tr>
+            </thead>
+            <tbody>
+
+            {this.state.films.map(
+              (film, i) => {
+                if (i !== 10) return(
+                <tr key = {film.id}>
+                  <td>{film.manufacturer}</td>
+                  <td>{film.name}</td>
+                  <td>{film.type}</td>
+                  <td>{film.iso}</td>
+                  <td>
+                  <i
+                    className={filmsContainer.state.chosen_film === film.id ? "bi-pin-angle-fill":"bi-pin"}
+                    onClick={
+                    () =>{filmsContainer.setState(
+                        {
+                          chosen_film: film.id
+                        }
+                      )
+                    }}
+                    />
+                  </td>
+                </tr>
+              )}
             )}
-          )}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+
         </div>
 
-        <div className="row g-3 m-1">
+        <div className="row mb-1 mt-n2">
+          <div className="col-md-6">
+          {this.state.page!==0 &&
+            <i
+              className="arrow bi-arrow-left"
+              onClick={()=>{
+                filmsContainer.setState(() =>({
+                  page: filmsContainer.state.page - 1,
+                  update: true
+              }))}}
+            />}
+          </div>
+          <div className="col-md-6">
+          {this.state.films.length==11 &&
+            <i
+              className="arrow bi-arrow-right"
+              onClick={()=>{
+                filmsContainer.setState(() =>({
+                  page: filmsContainer.state.page + 1,
+                  update: true
+              }))
+            }}
+            />}
+          </div>
+        </div>
+
+        <span className="border-top d-flex justify-content-center"/>
+
+        <div className="row g-3 m-2 mt-0">
           <div className="col-md-6">
             <input
               type="text"
@@ -160,14 +187,20 @@ class FilmsContainer extends Component{
           </div>
 
           <div className="col-md-6">
-            <input
+            <select
               name="type"
               type="text"
               value={this.state.addedFilm.type}
               onChange={this.handleAddedFormChange}
-              className="form-control"
+              className="form-select"
               placeholder="Тип"
-            />
+            >
+              <option>Тип...</option>
+              <option value="monochrome negative">Монохромная негативная</option>
+              <option value="monochrome positive">Монохромная позитивная</option>
+              <option value="color negative">Цветная негативная</option>
+              <option value="color positive">Цветная позитивная</option>
+            </select>
           </div>
 
           <div className="col-md-6">
