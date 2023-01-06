@@ -19,7 +19,7 @@ def create_film(film: schemas.FilmBase, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=list[schemas.Film])
-def read_films(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_films(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     films = crud.get_films(db, skip=skip, limit=limit)
     return films
 
