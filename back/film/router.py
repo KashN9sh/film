@@ -24,9 +24,9 @@ def read_films(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return films
 
 
-@router.get("/filter/{filter}", response_model=schemas.FilmBase)
-def read_film(filter: schemas.FilmBase, db: Session = Depends(get_db)):
-    # db_film = crud.get_film(db, film_id=film_id)
-    # if db_film is None:
-    #     raise HTTPException(status_code=404, detail="Film not found")
-    return filter
+@router.post("/filter", response_model=list[schemas.Film])
+def read_films_by_filter(filter: schemas.FilmBase, db: Session = Depends(get_db)):
+    films = crud.get_films_by_filter(db, filter=filter)
+    if not len(films):
+        raise HTTPException(status_code=404, detail="Films not found")
+    return films

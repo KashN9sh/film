@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
 class FilmBase(BaseModel):
+    manufacturer: str
     name: str
     iso: int
     type: str
