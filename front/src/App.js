@@ -1,8 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 import axios from 'axios'
-import bootstrap from 'bootstrap'
 import { Component } from 'react'
+import toast, { Toaster } from 'react-hot-toast';
 
 
 class FilmsContainer extends Component{
@@ -51,9 +51,10 @@ class FilmsContainer extends Component{
       })
           .then(function (response) {
             filmsContainer.getFilms()
+            toast.success("Пленка добавлена")
           })
           .catch(function (error) {
-            console.log(error)
+            toast.error(error.message)
           })
   }
 
@@ -63,7 +64,7 @@ class FilmsContainer extends Component{
     axios({
           method: 'get',
           url: '/film/',
-          params: new URLSearchParams({skip: filmsContainer.state.page*10}),
+          params: new URLSearchParams({skip: filmsContainer.state.page*5}),
       })
           .then(function (response) {
             filmsContainer.setState(
@@ -72,6 +73,7 @@ class FilmsContainer extends Component{
                 update: false
               }
             )
+
           })
           .catch(function (error) {
             filmsContainer.setState(
@@ -79,7 +81,7 @@ class FilmsContainer extends Component{
                 update: false
               }
             )
-            console.log(error)
+            toast.error(error)
           })
   }
 
@@ -148,7 +150,7 @@ class FilmsContainer extends Component{
             />}
           </div>
           <div className="col-md-6">
-          {this.state.films.length==11 &&
+          {this.state.films.length == 6 &&
             <i
               className="arrow bi-arrow-right"
               onClick={()=>{
@@ -231,6 +233,22 @@ function App() {
 
   return (
     <div className="container text-center ">
+    <Toaster
+      position="top-center"
+      reverseOrder={false}
+      gutter={8}
+      containerClassName=""
+      containerStyle={{}}
+      toastOptions={{
+        // Define default options
+        className: '',
+        duration: 5000,
+        style: {
+          background: '#000000',
+          color: '#FFFFFF',
+        },
+      }}
+      />
       <div className="row align-items-start align-middle">
 
         <FilmsContainer/>
