@@ -9,7 +9,7 @@ def get_developer(db: Session, developer_id: int):
 def get_developer_by_name(db: Session, name: str):
     return db.query(models.Developer).filter(models.Developer.name == name).first()
 
-def get_developers(db: Session, skip: int = 0, limit: int = 6):
+def get_developers(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.Developer).offset(skip).limit(limit).all()
 
 def get_developers_by_filter(db: Session, filter: schemas.DeveloperBase):

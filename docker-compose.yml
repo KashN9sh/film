@@ -25,7 +25,6 @@ services:
       - ./front:/app
     command: sleep 30d
 
-
   db:
     container_name: film-db
     image: postgres:14

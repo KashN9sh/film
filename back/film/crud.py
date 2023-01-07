@@ -9,7 +9,7 @@ def get_film(db: Session, film_id: int):
 def get_film_by_name(db: Session, name: str):
     return db.query(models.Film).filter(models.Film.name == name).first()
 
-def get_films(db: Session, skip: int = 0, limit: int = 6):
+def get_films(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.Film).offset(skip).limit(limit).all()
 
 def get_films_by_filter(db: Session, filter: schemas.FilmBase):

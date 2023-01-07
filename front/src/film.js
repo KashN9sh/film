@@ -20,6 +20,8 @@ export default class FilmsContainer extends Component{
       page: 0,
       update: false,
 
+      collapse:false,
+
       addedFilm:{
         manufacturer: "",
         name: "",
@@ -67,7 +69,7 @@ export default class FilmsContainer extends Component{
     axios({
           method: 'get',
           url: '/film/',
-          params: new URLSearchParams({skip: filmsContainer.state.page*5}),
+          params: new URLSearchParams({skip: filmsContainer.state.page*9}),
       })
           .then(function (response) {
             filmsContainer.setState(
@@ -95,137 +97,154 @@ export default class FilmsContainer extends Component{
       this.getFilms()
 
     return(
-      <div className="col border p-3 m-3 mt-3 rounded">
-        <h2>Пленки</h2>
+      <div className="border p-3 m-3 mt-3 rounded">
 
-        <div className="table-responsive">
-          <table className="table table-striped text-center">
-            <thead>
-              <tr>
-                <th>Производитель</th>
-                <th>Название</th>
-                <th>Тип</th>
-                <th>ISO</th>
-                <th></th>
+        <h2 onClick={
+          () =>{filmsContainer.setState(
+            {
+              collapse: !this.state.collapse
+            }
+          )
+        }
+        }>Пленки
+          <i className={
+            this.state.collapse ? "m-2 arrow bi-chevron-down":"m-2 arrow bi-chevron-up"
+          } />
+        </h2>
 
-              </tr>
-            </thead>
-            <tbody>
+        <div className={this.state.collapse ? "collapse":""}>
+          <div className="table-responsive">
+            <table className="table table-striped text-center">
+              <thead>
+                <tr>
+                  <th>Производитель</th>
+                  <th>Название</th>
+                  <th>Тип</th>
+                  <th>ISO</th>
+                  <th></th>
 
-            {this.state.films.map(
-              (film, i) => {
-                if (i !== 5) return(
-                <tr key = {film.id}>
-                  <td>{film.manufacturer}</td>
-                  <td>{film.name}</td>
-                  <td>{filmTypes[film.type]}</td>
-                  <td>{film.iso}</td>
-                  <td>
-                  <i
-                    className={filmsContainer.state.chosenFilm === film.id ? "bi-pin-angle-fill":"bi-pin"}
-                    onClick={
-                    () =>{filmsContainer.setState(
-                        {
-                          chosenFilm: film.id
-                        }
-                      )
-                    }}
-                    />
-                  </td>
                 </tr>
+              </thead>
+              <tbody>
+
+              {this.state.films.map(
+                (film, i) => {
+                  if (i !== 9) return(
+                  <tr key = {film.id}>
+                    <td>{film.manufacturer}</td>
+                    <td>{film.name}</td>
+                    <td>{filmTypes[film.type]}</td>
+                    <td>{film.iso}</td>
+                    <td>
+                    <i
+                      className={filmsContainer.state.chosenFilm === film.id ? "bi-pin-angle-fill":"bi-pin"}
+                      onClick={
+                      () =>{filmsContainer.setState(
+                          {
+                            chosenFilm: film.id
+                          }
+                        )
+                        this.props.onFilmChange(film)
+                      }}
+                      />
+                    </td>
+                  </tr>
+                )}
               )}
-            )}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
 
-        </div>
-
-        <div className="row mb-1 mt-n2">
-          <div className="col-md-6">
-          {this.state.page!==0 &&
-            <i
-              className="arrow bi-arrow-left"
-              onClick={()=>{
-                filmsContainer.setState(() =>({
-                  page: filmsContainer.state.page - 1,
-                  update: true
-              }))}}
-            />}
           </div>
-          <div className="col-md-6">
-          {this.state.films.length == 6 &&
-            <i
-              className="arrow bi-arrow-right"
-              onClick={()=>{
-                filmsContainer.setState(() =>({
-                  page: filmsContainer.state.page + 1,
-                  update: true
-              }))
-            }}
-            />}
+
+          <div className="row mb-1 mt-n2">
+            <div className="col-md-6">
+            {this.state.page!==0 &&
+              <i
+                className="arrow bi-arrow-left"
+                onClick={()=>{
+                  filmsContainer.setState(() =>({
+                    page: filmsContainer.state.page - 1,
+                    update: true
+                  }))
+              }}
+              />}
+            </div>
+            <div className="col-md-6">
+            {this.state.films.length == 10 &&
+              <i
+                className="arrow bi-arrow-right"
+                onClick={()=>{
+                  filmsContainer.setState(() =>({
+                    page: filmsContainer.state.page + 1,
+                    update: true
+                }))
+              }}
+              />}
+            </div>
           </div>
-        </div>
 
-        <span className="border-top d-flex justify-content-center"/>
+          <span className="border-top d-flex justify-content-center"/>
 
-        <div className="row g-3 m-2 mt-0">
-          <div className="col-md-6">
-            <input
-              type="text"
-              name="manufacturer"
-              value={this.state.addedFilm.manufacturer}
-              onChange={this.handleAddedFormChange}
-              className="form-control"
-              placeholder="Производитель"
+          <div className="row g-3 m-2 mt-0">
+            <div className="col-md-6">
+              <input
+                type="text"
+                name="manufacturer"
+                value={this.state.addedFilm.manufacturer}
+                onChange={this.handleAddedFormChange}
+                className="form-control"
+                placeholder="Производитель"
+                />
+            </div>
+
+            <div className="col-md-6">
+              <input
+                type="text"
+                name="name"
+                value={this.state.addedFilm.name}
+                onChange={this.handleAddedFormChange}
+                className="form-control"
+                placeholder="Название"
               />
+            </div>
+
+            <div className="col-md-6">
+              <select
+                name="type"
+                type="text"
+                value={this.state.addedFilm.type}
+                onChange={this.handleAddedFormChange}
+                className="form-select"
+                placeholder="Тип"
+              >
+                <option>Тип...</option>
+                <option value="monochrome_negative">Монохромная негативная</option>
+                <option value="monochrome_positive">Монохромная позитивная</option>
+                <option value="color_negative">Цветная негативная</option>
+                <option value="color_positive">Цветная позитивная</option>
+              </select>
+            </div>
+
+            <div className="col-md-6">
+              <input
+                name="iso"
+                type="text"
+                value={this.state.addedFilm.iso}
+                onChange={this.handleAddedFormChange}
+                className="form-control"
+                placeholder="ISO"
+              />
+            </div>
+
+            <button
+              type="button"
+              className="btn btn-dark"
+              onClick={this.addFilm}
+            >Добавить пленку</button>
+
           </div>
-
-          <div className="col-md-6">
-            <input
-              type="text"
-              name="name"
-              value={this.state.addedFilm.name}
-              onChange={this.handleAddedFormChange}
-              className="form-control"
-              placeholder="Название"
-            />
-          </div>
-
-          <div className="col-md-6">
-            <select
-              name="type"
-              type="text"
-              value={this.state.addedFilm.type}
-              onChange={this.handleAddedFormChange}
-              className="form-select"
-              placeholder="Тип"
-            >
-              <option>Тип...</option>
-              <option value="monochrome_negative">Монохромная негативная</option>
-              <option value="monochrome_positive">Монохромная позитивная</option>
-              <option value="color_negative">Цветная негативная</option>
-              <option value="color_positive">Цветная позитивная</option>
-            </select>
-          </div>
-
-          <div className="col-md-6">
-            <input
-              name="iso"
-              type="text"
-              value={this.state.addedFilm.iso}
-              onChange={this.handleAddedFormChange}
-              className="form-control"
-              placeholder="ISO"
-            />
-          </div>
-
-          <button
-            type="button"
-            className="btn btn-dark"
-            onClick={this.addFilm}
-          >Добавить пленку</button>
-
         </div>
+
 
     </div>
     )
