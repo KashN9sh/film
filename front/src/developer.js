@@ -2,6 +2,7 @@ import { Component } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast';
 
+import {developerTypes} from './sources'
 
 export default class DeveeloperContainer extends Component{
 
@@ -26,6 +27,10 @@ export default class DeveeloperContainer extends Component{
       }
 
     }
+  }
+
+  componentDidMount(){
+      this.getFilms()
   }
 
   handleAddedFormChange(event) {
@@ -85,7 +90,7 @@ export default class DeveeloperContainer extends Component{
   render() {
     let developersContainer = this
 
-    if (developersContainer.state.update || developersContainer.state.developers.length === 0)
+    if (developersContainer.state.update)
       this.getFilms()
 
     return(
@@ -111,7 +116,7 @@ export default class DeveeloperContainer extends Component{
                 <tr key = {developer.id}>
                   <td>{developer.manufacturer}</td>
                   <td>{developer.name}</td>
-                  <td>{developer.type}</td>
+                  <td>{developerTypes[developer.type]}</td>
                   <td>
                   <i
                     className={developersContainer.state.chosenDeveloper === developer.id ? "bi-pin-angle-fill":"bi-pin"}
@@ -183,7 +188,7 @@ export default class DeveeloperContainer extends Component{
             />
           </div>
 
-          <div className="col-md-6">
+          <div className="col-md-12">
             <select
               name="type"
               type="text"
@@ -193,10 +198,12 @@ export default class DeveeloperContainer extends Component{
               placeholder="Тип"
             >
               <option>Тип...</option>
-              <option value="monochrome negative">Монохромная негативная</option>
-              <option value="monochrome positive">Монохромная позитивная</option>
-              <option value="color negative">Цветная негативная</option>
-              <option value="color positive">Цветная позитивная</option>
+              <option value="normal">Нормальный</option>
+              <option value="contrast">Контрастный</option>
+              <option value="fast">Быстродействующий</option>
+              <option value="soft">Мягкий</option>
+              <option value="fine_grain">Мелкозернистый</option>
+              <option value="special">Специальный</option>
             </select>
           </div>
 

@@ -2,6 +2,7 @@ import { Component } from 'react'
 import axios from 'axios'
 import toast from 'react-hot-toast';
 
+import {filmTypes} from './sources'
 
 export default class FilmsContainer extends Component{
 
@@ -27,6 +28,10 @@ export default class FilmsContainer extends Component{
       }
 
     }
+  }
+
+  componentDidMount(){
+      this.getFilms()
   }
 
   handleAddedFormChange(event) {
@@ -86,7 +91,7 @@ export default class FilmsContainer extends Component{
   render() {
     let filmsContainer = this
 
-    if (filmsContainer.state.update || filmsContainer.state.films.length === 0)
+    if (filmsContainer.state.update)
       this.getFilms()
 
     return(
@@ -113,7 +118,7 @@ export default class FilmsContainer extends Component{
                 <tr key = {film.id}>
                   <td>{film.manufacturer}</td>
                   <td>{film.name}</td>
-                  <td>{film.type}</td>
+                  <td>{filmTypes[film.type]}</td>
                   <td>{film.iso}</td>
                   <td>
                   <i
@@ -196,10 +201,10 @@ export default class FilmsContainer extends Component{
               placeholder="Тип"
             >
               <option>Тип...</option>
-              <option value="monochrome negative">Монохромная негативная</option>
-              <option value="monochrome positive">Монохромная позитивная</option>
-              <option value="color negative">Цветная негативная</option>
-              <option value="color positive">Цветная позитивная</option>
+              <option value="monochrome_negative">Монохромная негативная</option>
+              <option value="monochrome_positive">Монохромная позитивная</option>
+              <option value="color_negative">Цветная негативная</option>
+              <option value="color_positive">Цветная позитивная</option>
             </select>
           </div>
 
