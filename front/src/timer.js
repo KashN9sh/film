@@ -8,10 +8,47 @@ import {filmTypes, developerTypes} from './sources'
 export default class TimerContainer extends Component{
   constructor(props){
     super()
+    this.state = {
+      recipes: null,
 
+      page: 0,
+      update:false
+    }
+  }
+
+  getRecipes(){
+    let timerContainer = this
+
+    axios({
+          method: 'post',
+          url: '/recipe/filter',
+          data: {
+            film_id: this.props.film.id,
+            developer_id: this.props.developer.id
+          }
+      })
+          .then(function (response) {
+            timerContainer.setState(() =>({
+              recipes: response.data,
+              update: false
+          }))
+            toast.success("Рецепты найдены")
+          })
+          .catch(function (error) {
+            timerContainer.setState(
+              {
+                update: false,
+                recipes: []
+              }
+            )
+            toast.error(error.message)
+          })
   }
 
   render(){
+    if (this.props.film && this.props.developer && (this.state.recipes === null || this.state.update === true))
+      this.getRecipes()
+
     return(
       <div className="border p-3 m-3 rounded">
         <h2>Таймер</h2>

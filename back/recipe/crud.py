@@ -7,7 +7,8 @@ from . import models, schemas
 #     return db.query(models.Recipe).filter(models.Recipe.id == recipe_id).first()
 
 def get_recipes_by_filter(db: Session, filter: schemas.RecipeBase, skip: int = 0, limit: int = 10):
-    return db.query(models.Recipe).filter_by(**dict(filter)).offset(skip).limit(limit).all()
+    filter = {k: v for k, v in dict(filter).items() if v is not None}
+    return db.query(models.Recipe).filter_by(**(filter)).offset(skip).limit(limit).all()
 
 def create_recipe(db: Session, recipe: schemas.RecipeBase):
     db_recipe = models.Recipe(

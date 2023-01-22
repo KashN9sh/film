@@ -1,10 +1,10 @@
 from pydantic import BaseModel
 
 class RecipeBase(BaseModel):
-    iso: int
+    iso: int = None
     film_id: int
     developer_id: int
-    time: int
+    time: int = None
 
 
 class Recipe(RecipeBase):
