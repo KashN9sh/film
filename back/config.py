@@ -3,4 +3,5 @@ MODEL_MODULES = (
     "user.models",
     "film.models",
     "developer.models",
+    "recipe.models",
 )
