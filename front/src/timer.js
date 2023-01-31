@@ -27,8 +27,7 @@ export default class TimerContainer extends Component{
     this.setState({
       remainingSeconds: this.state.remainingSeconds - 1
     })
-      console.log(this.state.remainingSeconds)
-      if (this.state.remainingSeconds == 0) clearInterval(this.state.interval);
+      if (this.state.remainingSeconds == 1) clearInterval(this.state.interval);
   }
 
   getRecipes(){
